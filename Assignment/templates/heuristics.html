@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>State Space Tree Visualization</title>
+    <!-- <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='vis/vis-network.min.css') }}"> -->
+    <script type="text/javascript" src="https://unpkg.com/vis-network@7.7.0/dist/vis-network.min.js"></script>
+
+    <style>
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+            overflow: hidden;
+            /* Hide any overflowing content */
+        }
+
+        /* Style the graph container to occupy the full viewport */
+        #mctree {
+            width: 100%;
+            height: 100vh;
+            /* margin-top: -25px; */
+            /* 100% of the viewport height */
+        }
+
+        .left-side {
+            width: 60%;
+            float: left;
+            background-color: #E4E4E4;
+        }
+
+        .right-side {
+            width: 40%;
+            float: left;
+            background-color: #bdbdbd;
+            height: 100%;
+        }
+
+        .legend {
+            padding: 20px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .circle {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-right: 10px;
+            margin-bottom: 20px;
+            /* Adjust the margin as needed */
+        }
+
+        .legend-text {
+            margin: 0;
+            margin-bottom: 20px;
+            font-size: 30px;
+        }
+
+        .bottom {
+            padding-left: 20px;
+            margin-bottom: 0px;
+            padding-right: 50px;
+        }
+
+        .bottom-text {
+            font-size: 30px;
+            text-align: justify;
+        }
+
+        .top-text {
+            display: block;
+            font-size: 35px;
+            font-weight: bold;
+            padding: 15px;
+            margin: 0px;
+        }
+
+        #header {
+            background: #006633;
+            color: #ffCC33;
+            margin: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="header">
+        <h1 class="top-text">Missionaries and Cannibal State Space Tree.</h1>
+    </div>
+    <div class="left-side">
+        <div id="mctree"></div>
+    </div>
+
+    <div class="right-side">
+        <h1 style="padding-left: 20px; margin-bottom: 0px;">LEGEND</h1>
+
+        <div class="legend">
+            <div class="legend-item">
+                <div class="circle" style="background-color: blue;"></div>
+                <p class="legend-text">Initial State</p>
+            </div>
+
+            <div class="legend-item">
+                <div class="circle" style="background-color: red;"></div>
+                <p class="legend-text">Killed State</p>
+            </div>
+
+            <div class="legend-item">
+                <div class="circle" style="background-color: green;"></div>
+                <p class="legend-text">Goal State</p>
+            </div>
+            <!-- Add more legend items for other colors as needed -->
+        </div>
+
+        <div class="bottom">
+            <h1>DESCRIPTION</h1>
+            <p class="bottom-text">This is the state space tree for the missionaries and cannibal problem. Here each
+                node represent the current state of the problem. Each node has three values x,y,z. X represent the no of
+                missionaries in left shore. Y represent the no of cannibal in the left shore and Z represent the boat.
+                If Z is 1, the boat is in left shore and if Z is 0, the boat is in the right shore.</p>
+        </div>
+    </div>
+
+    <!-- <script type="text/javascript" src="{{ url_for('static', filename='vis/vis-network.min.js') }}"></script> -->
+    <script type="text/javascript" src="https://unpkg.com/vis-network@7.7.0/dist/vis-network.min.js"></script>
+    <script>
+        var nodes = null;
+        var edges = null;
+        var network = null;
+
+        // JavaScript code to create nodes with images
+        var nodesData = new vis.DataSet({{ graph_data.nodes | tojson | safe }});
+        var nodesArray = [];
+
+        nodesData.forEach(function (data, index) {
+            // console.log(data.label)
+            // console.log(data)
+
+
+            var dataarray = JSON.parse(data.label);
+
+            // var fillcolor = 'orange';
+            var fillcolor = data.color
+            var textcolor = 'black';
+            var strokecolor = 'white';
+            var strokewidth = 10;
+            var fontsize = 75;
+            var svgwidth = 400; // Increase SVG width
+            var svgheight = 400; // Increase SVG height
+            var rectwidth = 133.33; // Increase rectangle width
+            var rectheight = 133.33; // Increase rectangle height
+
+            // Create an SVG with the desired content
+            var svg = '<svg width="' + svgwidth + '" height="' + svgheight + '" xmlns="http://www.w3.org/2000/svg">';
+            svg += '<rect x="0" y="0" width="' + rectwidth + '" height="' + rectheight + '" fill="' + fillcolor + '" stroke="' + strokecolor + '" stroke-width="' + strokewidth + '" />';
+            svg += '<rect x="' + rectwidth + '" y="0" width="' + rectwidth + '" height="' + rectheight + '" fill="' + fillcolor + '" stroke="' + strokecolor + '" stroke-width="' + strokewidth + '" />';
+            svg += '<rect x="' + (2 * rectwidth) + '" y="0" width="' + rectwidth + '" height="' + rectheight + '" fill="' + fillcolor + '" stroke="' + strokecolor + '" stroke-width="' + strokewidth + '" />';
+            svg += '<rect x="0" y="' + rectheight + '" width="' + rectwidth + '" height="' + rectheight + '" fill="' + fillcolor + '" stroke="' + strokecolor + '" stroke-width="' + strokewidth + '" />';
+            svg += '<rect x="' + rectwidth + '" y="' + rectheight + '" width="' + rectwidth + '" height="' + rectheight + '" fill="' + fillcolor + '" stroke="' + strokecolor + '" stroke-width="' + strokewidth + '" />';
+            svg += '<rect x="' + (2 * rectwidth) + '" y="' + rectheight + '" width="' + rectwidth + '" height="' + rectheight + '" fill="' + fillcolor + '" stroke="' + strokecolor + '" stroke-width="' + strokewidth + '" />';
+            svg += '<rect x="0" y="' + (2 * rectheight) + '" width="' + rectwidth + '" height="' + rectheight + '" fill="' + fillcolor + '" stroke="' + strokecolor + '" stroke-width="' + strokewidth + '" />';
+            svg += '<rect x="' + rectwidth + '" y="' + (2 * rectheight) + '" width="' + rectwidth + '" height="' + rectheight + '" fill="' + fillcolor + '" stroke="' + strokecolor + '" stroke-width="' + strokewidth + '" />';
+            svg += '<rect x="' + (2 * rectwidth) + '" y="' + (2 * rectheight) + '" width="' + rectwidth + '" height="' + rectheight + '" fill="' + fillcolor + '" stroke="' + strokecolor + '" stroke-width="' + strokewidth + '" />';
+            svg += '<text x="' + (rectwidth / 2) + '" y="' + (rectheight / 2) + '" font-size="' + fontsize + '" text-anchor="middle" fill="' + textcolor + '">' + dataarray[0][0] + '</text>';
+            svg += '<text x="' + (rectwidth + (rectwidth / 2)) + '" y="' + (rectheight / 2) + '" font-size="' + fontsize + '" text-anchor="middle" fill="' + textcolor + '">' + dataarray[0][1] + '</text>';
+            svg += '<text x="' + ((2 * rectwidth) + (rectwidth / 2)) + '" y="' + (rectheight / 2) + '" font-size="' + fontsize + '" text-anchor="middle" fill="' + textcolor + '">' + dataarray[0][2] + '</text>';
+            svg += '<text x="' + (rectwidth / 2) + '" y="' + (rectheight + (rectheight / 2)) + '" font-size="' + fontsize + '" text-anchor="middle" fill="' + textcolor + '">' + dataarray[1][0] + '</text>';
+            svg += '<text x="' + (rectwidth + (rectwidth / 2)) + '" y="' + (rectheight + (rectheight / 2)) + '" font-size="' + fontsize + '" text-anchor="middle" fill="' + textcolor + '">' + dataarray[1][1] + '</text>';
+            svg += '<text x="' + ((2 * rectwidth) + (rectwidth / 2)) + '" y="' + (rectheight + (rectheight / 2)) + '" font-size="' + fontsize + '" text-anchor="middle" fill="' + textcolor + '">' + dataarray[1][2] + '</text>';
+            svg += '<text x="' + (rectwidth / 2) + '" y="' + ((2 * rectheight) + (rectheight / 2)) + '" font-size="' + fontsize + '" text-anchor="middle" fill="' + textcolor + '">' + dataarray[2][0] + '</text>';
+            svg += '<text x="' + (rectwidth + (rectwidth / 2)) + '" y="' + ((2 * rectheight) + (rectheight / 2)) + '" font-size="' + fontsize + '" text-anchor="middle" fill="' + textcolor + '">' + dataarray[2][1] + '</text>';
+            svg += '<text x="' + ((2 * rectwidth) + (rectwidth / 2)) + '" y="' + ((2 * rectheight) + (rectheight / 2)) + '" font-size="' + fontsize + '" text-anchor="middle" fill="' + textcolor + '">' + dataarray[2][2] + '</text>';
+            svg += '</svg>';
+
+
+            // Create a data object with the SVG content
+            nodesArray.push({
+                id: data.id,
+                shape: 'image',
+                image: 'data:image/svg+xml;base64,' + btoa(svg), // Convert SVG to base64
+                level: data.level,
+                // label: 'f(n)=1,g(n)=2, h(n)=3',
+                label: data.h_value
+                // font: {
+                //     size: 15,
+                //     color: "red",
+                //     face: "courier",
+                //     strokeWidth: 3,
+                //     strokeColor: "#ffffff",
+                // },
+            });
+        });
+
+        // Create a data set from the array
+        var nodesData = new vis.DataSet(nodesArray);
+
+        var data = {
+            nodes: nodesData,
+            edges: new vis.DataSet({{ graph_data.edges | tojson | safe }}),
+        };
+        console.log(edges)
+        // Create a network visualization
+        var container = document.getElementById('mctree');
+        var options = {
+            layout: {
+                hierarchical: {
+                    direction: 'UD',
+                    sortMethod: 'directed',
+                    levelSeparation: 90,
+                    nodeSpacing: 180,
+                }
+            },
+            physics: {
+                enabled: false
+            },
+
+        };
+        var network = new vis.Network(container, data, options);
+    </script>
+</body>
+
+</html>

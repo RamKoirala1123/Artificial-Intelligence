@@ -92,7 +92,7 @@
 
 <body>
     <div id="header">
-        <h1 class="top-text">Missionaries and Cannibal State Space Tree.</h1>
+        <h1 class="top-text">8 Puzzle Game State Space Tree.</h1>
     </div>
     <div class="left-side">
         <div id="mctree"></div>
@@ -103,28 +103,31 @@
 
         <div class="legend">
             <div class="legend-item">
-                <div class="circle" style="background-color: blue;"></div>
-                <p class="legend-text">Initial State</p>
+                <div class="circle" style="background-color: green;"></div>
+                <p class="legend-text">Solution Path</p>
             </div>
 
             <div class="legend-item">
+                <div class="circle" style="background-color: orange;"></div>
+                <p class="legend-text">Killed Node</p>
+            </div>
+
+            <!-- <div class="legend-item">
                 <div class="circle" style="background-color: red;"></div>
                 <p class="legend-text">Killed State</p>
-            </div>
+            </div> -->
 
-            <div class="legend-item">
-                <div class="circle" style="background-color: green;"></div>
-                <p class="legend-text">Goal State</p>
-            </div>
+          
             <!-- Add more legend items for other colors as needed -->
         </div>
 
         <div class="bottom">
             <h1>DESCRIPTION</h1>
-            <p class="bottom-text">This is the state space tree for the missionaries and cannibal problem. Here each
-                node represent the current state of the problem. Each node has three values x,y,z. X represent the no of
-                missionaries in left shore. Y represent the no of cannibal in the left shore and Z represent the boat.
-                If Z is 1, the boat is in left shore and if Z is 0, the boat is in the right shore.</p>
+            <p class="bottom-text">This is the state space tree for the 8 Puzzle game. Here each
+                state represent the current state of the problem. 
+                Each node has three values  <strong>g</strong>, <strong>h</strong>, <strong>f</strong>.<br> <strong>g</strong> represents the the number of nodes traversed from the start node to current node. 
+                <strong>h</strong> represents  how far the goal node is and <strong>f</strong> represents the sum of g and h.
+                </p>
         </div>
     </div>
 

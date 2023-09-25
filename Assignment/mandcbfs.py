@@ -2,7 +2,6 @@ from collections import deque
 
 Parent, Move, node_list = dict(), dict(), dict()
 
-
 class Solution():
 
     def __init__(self):
@@ -57,10 +56,16 @@ class Solution():
             can_be_expanded = False
 
             if self.is_goal_state(number_missionaries, number_cannnibals, side):
-                return True
-            
+                print(f"Final state: ({number_missionaries}, {number_cannnibals}, {side})")
+                print("Goal state reached!")
+                break
+
             elif self.number_of_cannibals_exceeds(number_missionaries, number_cannnibals):
+                print(f"Visiting state: ({number_missionaries}, {number_cannnibals}, {side})")
+                print("Cannibals exceed missionaries! Skipping this state.")
                 continue
+            
+            print(f"Visiting state: ({number_missionaries}, {number_cannnibals}, {side})")
             
             for x, y in self.options:
                 next_m, next_c, next_s = number_missionaries + op * x, number_cannnibals + op * y, int(not side)
@@ -71,41 +76,12 @@ class Solution():
                         q.append((next_m, next_c, next_s, depth_level + 1))
                         Parent[(next_m, next_c, next_s)] = (number_missionaries, number_cannnibals, side)
                         Move[(next_m, next_c, next_s)] = (x, y, side)
-                
-                if not can_be_expanded:
-                    pass
-        return False
+            
+            if not can_be_expanded:
+                print("No valid moves from this state.")
+            
+            print(f"BFS Queue: {[(state[0], state[1], state[2]) for state in q]}")
 
-
-    def get_graph_data(self):
-        nodes = []
-        edges = []
-        levels = {}
-
-        for state, parent_state in Parent.items():
-            if parent_state is not None:
-                edge_data = {
-                    'from' : str(parent_state),
-                    'to': str(state),
-                    'arrows': 'to'
-                }
-                edges.append(edge_data)
-            if parent_state is not None:
-            # Determine the level of the current node based on the parent's level
-                current_level = levels[parent_state] + 1
-            else:
-            # The root node is at level 0
-                current_level = 0
-                
-            levels[state] = current_level
-            node_data = {
-                'id': str(state),
-                'label': str(state),
-                'level': current_level,
-                'color': 'blue' if self.is_start_state(*state) else 'green' if self.is_goal_state(*state) else 'red' if self.number_of_cannibals_exceeds(state[0], state[1]) else 'orange'
-            }
-            nodes.append(node_data)
-        return {
-            'nodes': nodes,
-            'edges': edges
-        }
+if __name__ == '__main__':
+    solver = Solution()
+    solver.solve()

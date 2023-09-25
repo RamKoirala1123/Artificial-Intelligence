@@ -1,8 +1,4 @@
-from flask import Flask, render_template
 from collections import deque
-import heapq
-
-app = Flask(__name__)
 
 class EightPuzzleState:
     def __init__(self, state, parent=None, move=None, level=0):
@@ -79,7 +75,6 @@ def solve_eight_puzzle(initial_state, goal_state):
 
     while queue:
         current_node = queue.popleft()
-        print('the current node is',current_node)
 
         if current_node.is_goal(goal_state):
             break
@@ -88,7 +83,6 @@ def solve_eight_puzzle(initial_state, goal_state):
         for move in current_node.get_possible_moves():
                 child_node = current_node.generate_child(move) 
                 if str(child_node.state) not in visited:
-                    print('the childrens aree', child_node) 
                     nodes.append({
                         'color': 'orange' if not child_node.is_goal(goal_state)  else 'green',
                         'id': str(child_node),
@@ -107,7 +101,6 @@ def solve_eight_puzzle(initial_state, goal_state):
         if siblings:
                     # Find the sibling with the minimum number of misplaced tiles among siblings
                     min_sibling = min(siblings, key=lambda node: calculate_misplaced_tiles(node.state, goal_state))
-                    print('the min sibling is',min_sibling)
         for node_data in nodes:
             if node_data['id'] == str(min_sibling):
                 node_data['color'] = 'green'
@@ -115,32 +108,5 @@ def solve_eight_puzzle(initial_state, goal_state):
                 node_data['color'] = 'green'
         
         queue.append(min_sibling)
-        print('the child_node is',child_node)
     
     return nodes, edges
-
-
-@app.route('/index')
-def index():
-    initial_state = [
-        [2, 8, 3],
-        [1, 6, 4],
-        [7, 0, 5]
-    ]
-
-    goal_state = [
-        [1, 2, 3],
-        [8, 0, 4],
-        [7, 6, 5]
-    ]
-
-    nodes, edges = solve_eight_puzzle(initial_state, goal_state)
-    graph_data = {
-        'nodes': nodes,
-        'edges': edges
-    }
-    print('the graph_data is', graph_data)
-    return render_template('heuristics1.html', graph_data=graph_data)
-
-if __name__ == "__main__":
-    app.run(debug=True)

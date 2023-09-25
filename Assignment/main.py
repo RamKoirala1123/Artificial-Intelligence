@@ -37,7 +37,7 @@ def screen2():
         'nodes': nodes,
         'edges': edges
     }
-    print('the graph_data is', graph_data)
+    # print('the graph_data is', graph_data)
     return render_template('heuristics.html', graph_data=graph_data)
 
 

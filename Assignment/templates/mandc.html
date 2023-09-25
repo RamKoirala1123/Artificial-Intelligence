@@ -132,14 +132,11 @@
     <script type="text/javascript">
         var nodes = new vis.DataSet({{ graph_data.nodes | tojson | safe }});
         var edges = new vis.DataSet({{ graph_data.edges | tojson | safe }});
-        console.log({{ graph_data.edges | tojson | safe }});
-        console.log({{graph_data.nodes | tojson | safe}});
         var container = document.getElementById('mctree');
         var data = {
             nodes: nodes,
             edges: edges
         };
-        // console.log(data)
         var options = {
             layout: {
                 hierarchical: {

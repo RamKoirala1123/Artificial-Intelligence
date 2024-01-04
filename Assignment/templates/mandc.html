@@ -6,7 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>State Space Tree Visualization</title>
     <!-- <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='vis/vis-network.min.css') }}"> -->
-    <script type="text/javascript" src="https://unpkg.com/vis-network@7.7.0/dist/vis-network.min.js"></script>
+    <!-- <script type="text/javascript" src="https://unpkg.com/vis-network@7.7.0/dist/vis-network.min.js"></script> -->
+    <script type="text/javascript" src="https://visjs.github.io/vis-network/standalone/umd/vis-network.min.js"></script>
 
     <style>
         html,
@@ -74,7 +75,7 @@
 
         .top-text {
             display: block;
-            font-size: 35px;
+            font-size: 30px;
             font-weight: bold;
             padding: 15px;
             margin:0px;
@@ -84,6 +85,21 @@
             background: #006633;
             color: #ffCC33;
             margin:0;
+            display: flex;
+            justify-content: space-between;
+            padding-right: 100px;
+        }
+        .btn {
+            display: inline-block;
+            text-decoration: none;
+            font-weight: bold;
+            padding: 22px 20px;
+            font-size: 16px;
+            border-radius: 20px;
+            color: white;
+            background-color: #ffCC33;
+            transition: 0.3s;
+            color: black;
         }
 
     </style>
@@ -92,6 +108,7 @@
 <body>
     <div id="header">
         <h1 class="top-text">Missionaries and Cannibal State Space Tree.</h1>
+        <a href="/heuristics"><button class="btn">Heuristics</button></a>
     </div>
     <div class="left-side">
         <div id="mctree"></div>
@@ -128,7 +145,7 @@
     </div>
 
     <!-- <script type="text/javascript" src="{{ url_for('static', filename='vis/vis-network.min.js') }}"></script> -->
-    <script type="text/javascript" src="https://unpkg.com/vis-network@7.7.0/dist/vis-network.min.js"></script>
+    <!-- <script type="text/javascript" src="https://unpkg.com/vis-network@7.7.0/dist/vis-network.min.js"></script> -->
     <script type="text/javascript">
         var nodes = new vis.DataSet({{ graph_data.nodes | tojson | safe }});
         var edges = new vis.DataSet({{ graph_data.edges | tojson | safe }});

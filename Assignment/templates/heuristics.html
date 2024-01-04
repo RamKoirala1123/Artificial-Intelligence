@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>State Space Tree Visualization</title>
     <!-- <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='vis/vis-network.min.css') }}"> -->
-    <script type="text/javascript" src="https://unpkg.com/vis-network@7.7.0/dist/vis-network.min.js"></script>
+    <!-- <script type="text/javascript" src="https://unpkg.com/vis-network@7.7.0/dist/vis-network.min.js"></script> -->
 
     <style>
         html,
@@ -76,7 +76,7 @@
 
         .top-text {
             display: block;
-            font-size: 35px;
+            font-size: 30px;
             font-weight: bold;
             padding: 15px;
             margin: 0px;
@@ -86,6 +86,22 @@
             background: #006633;
             color: #ffCC33;
             margin: 0;
+            display: flex;
+            justify-content: space-between;
+            padding-right: 100px;
+        }
+
+        .btn {
+            display: inline-block;
+            text-decoration: none;
+            font-weight: bold;
+            padding: 22px 20px;
+            font-size: 16px;
+            border-radius: 20px;
+            color: white;
+            background-color: #ffCC33;
+            transition: 0.3s;
+            color: black;
         }
     </style>
 </head>
@@ -93,6 +109,7 @@
 <body>
     <div id="header">
         <h1 class="top-text">8 Puzzle Game State Space Tree.</h1>
+        <a href="/mandc"><button class="btn">M and C</button></a>
     </div>
     <div class="left-side">
         <div id="mctree"></div>
@@ -117,22 +134,25 @@
                 <p class="legend-text">Killed State</p>
             </div> -->
 
-          
+
             <!-- Add more legend items for other colors as needed -->
         </div>
 
         <div class="bottom">
             <h1>DESCRIPTION</h1>
             <p class="bottom-text">This is the state space tree for the 8 Puzzle game. Here each
-                state represent the current state of the problem. 
-                Each node has three values  <strong>g</strong>, <strong>h</strong>, <strong>f</strong>.<br> <strong>g</strong> represents the the number of nodes traversed from the start node to current node. 
-                <strong>h</strong> represents  how far the goal node is and <strong>f</strong> represents the sum of g and h.
-                </p>
+                state represent the current state of the problem.
+                Each node has three values <strong>g</strong>, <strong>h</strong>, <strong>f</strong>.<br>
+                <strong>g</strong> represents the the number of nodes traversed from the start node to current node.
+                <strong>h</strong> represents how far the goal node is and <strong>f</strong> represents the sum of g
+                and h.
+            </p>
         </div>
     </div>
 
     <!-- <script type="text/javascript" src="{{ url_for('static', filename='vis/vis-network.min.js') }}"></script> -->
-    <script type="text/javascript" src="https://unpkg.com/vis-network@7.7.0/dist/vis-network.min.js"></script>
+    <!-- <script type="text/javascript" src="https://unpkg.com/vis-network@7.7.0/dist/vis-network.min.js"></script> -->
+    <script type="text/javascript" src="https://visjs.github.io/vis-network/standalone/umd/vis-network.min.js"></script>
     <script>
         var nodes = null;
         var edges = null;
